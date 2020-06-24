@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<beans:bean id="bcryptPasswordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+<!-- 비밀번호 엔코드 객체 생성 부분 -->
+
+
+	<beans:bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<beans:property name="basenames">
+			<beans:list>
+				<beans:value>/WEB-INF/message/security_message</beans:value>
+			</beans:list>
+		</beans:property>
+		<beans:property name="defaultEncoding" value="UTF-8" />
+		<beans:property name="cacheSeconds" value="5" />
+	</beans:bean>
+
+	<!--스프링 시큐리티 오류 메세지 한글 적용 부분 -->
+
+	<beans:bean id="customUserDetailsService"
+		class="security.CustomUserDetailsService" />
+
+<!-- 시큐리티를 처리하는 서비스 빈 만들기  -->
+<!-- UserDetailsService 라는 시큐리티 인터페이스를 상속받아 오버라이딩 해서 중간에 값을처리하는방법을 변경시킨다 (사용자설정)-->
+<!-- 중간에 데이터베이스를 끼워넣어 데이터베이스의 넣어져있는값으로 아이디와 비밀번호를 확인한다 -->
+
+
+	<security:http auto-config="true" use-expressions="true">
+		<security:intercept-url pattern="/member/**"
+			access="hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')" />
+		<security:intercept-url pattern="/admin/**"
+			access="hasRole('ROLE_ADMIN')" />
+		<security:intercept-url pattern="/**"
+			access="permitAll" />
+
+<!-- 주소값에 따른 권한 제한 -->
+
+<!--pemitAll 모두 접근 가능 denyAll모두 접근 불가 -->
+
+<!--hasRole권한 1개 일때 설정 hasAnyRole 권한들 -->
+
+
+		<security:form-login 
+		username-parameter="loginId"
+		password-parameter="password"
+		login-processing-url="/login"
+		login-page="/login"
+		default-target-url="/" />
+
+<!-- 로그인 부분 -->
+	<!-- username-parameter="loginId" -->
+	<!-- form 에서login 파라메터 값을 설정 -->
+
+	<!-- login-processing-url="/login" -->
+	<!--로그인을 할때 form 태그의 action 속성값을 지정한다 보내는곳 지정 -->
+
+	<!-- login-page="/loginPage" -->
+	<!-- 로그인 페이지의 url지정 login.jsp 위치 컨트롤러에서 value값과 리턴값을 지정해줘야 작동한다 -->
+	<!-- 로그인이 필요할시 호출할 주소값 설정이라고 봐도 무방하다 -->
+
+	<!-- default-target-url="/" -->
+	<!-- 로그인 성공시, 가게 될 페이지를 뜻한다. /에 해당하는 기본페이지로 이동 -->
+	
+	
+	
+		<security:logout 
+		logout-url="/logout"
+		logout-success-url="/" />
+	</security:http>
+
+
+<!--로그아웃 부분  -->
+
+<!-- logout-url="/logout" 로그아웃을 보낼 주소값 설정 -->
+<!-- logout-success-url="/" 로그아웃 성공시 이동할 주소 -->
+<!-- invalidate-session를 사용하면 로그아웃 시, session을 무효화할 지 선택.
+ 할수 있지만 디폴드 값이 ture라서 명시하지않아도 로그아웃시 세션이 삭제된다 -->
+
+
+
+
+
+
+	<security:authentication-manager>
+		<security:authentication-provider
+			user-service-ref="customUserDetailsService">
+			<!-- <security:password-encoder ref="bcryptPasswordEncoder" /> -->
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+<!-- 시큐리티에 위에서 만든 빈 과 암호화 방법을 지정하여 시큐리티설정을 완료 -->
+	
+	
+	
+
+	
+
+</beans:beans>
+
+

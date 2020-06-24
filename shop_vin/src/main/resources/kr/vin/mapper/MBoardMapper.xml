@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.vin.mapper.MBoardMapper">
+
+	<select id="getMBoardList" resultType="kr.vin.domain.MBoardVO">
+	
+		<![CDATA[
+		select * from tbl_board2 
+		]]>
+		<!-- xml에서 <> 에 대한 잘못된 해석을 방지. -->
+
+	</select>
+	
+	<select id="getMBoardContent" resultType="kr.vin.domain.MBoardVO"
+								  parameterType="kr.vin.domain.MBoardVO">
+		select * from tbl_board2 where BID=#{bid}
+	</select>
+	
+	<insert id="insertMBoard">
+		insert into tbl_board2
+		(CATE_CD,title,content,TAG, VIEW_CNT, REG_ID, REG_DT, EDIT_DT)
+		values (
+		 #{cate_cd}
+		,#{title}
+		,#{content}
+		,#{tag}
+		,0
+		,#{reg_id}
+		,sysdate
+		,sysdate		
+		)		
+	</insert>
+	
+	<update id="updateMBoard" parameterType="kr.vin.domain.MBoardVO">
+		update tbl_board2 set
+		CATE_CD = #{cate_cd}
+		,title = #{title , jdbcType=VARCHAR}
+		,content = #{content , jdbcType=VARCHAR}
+		,TAG = #{tag , jdbcType=VARCHAR}
+		,EDIT_DTe=sysdate
+		where BID=#{bid}
+	</update>
+	
+	<delete id="deleteMBoard">
+		delete tbl_board2 where BID =#{bid}
+	</delete>
+	
+	<update id="updateViewCnt" parameterType="kr.vin.domain.MBoardVO" >
+		UPDATE TBLBOARD2 SET
+			VIEW_CNT = VIEW_CNT + 1
+				WHERE BID = #{BID}
+	
+	</update>
+	
+	
+	
+	
+	
+	
+
+	<sql id="criteria">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach item="type" collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type=='T'.toString()">
+							title like '%'||#{keyword}||'%'
+						</when>
+						<when test="type=='C'.toString()">
+							content like '%'||#{keyword}||'%'
+						</when>
+						<when test="type=='W'.toString()">
+							writer like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
+	<select id="getListWithPaging"
+		resultType="kr.vin.domain.BoardVO">
+<![CDATA[
+		select bno, title, content, writer, regdate, updatedate 
+		from
+		(
+		select /*+INDEX_DESC(tbl_board pk_board) */ 
+		rownum rn, bno, title, content, writer, regdate, 
+		updatedate 
+		from 
+		tbl_board 
+		where 
+		]]>
+
+		<include refid="criteria" />
+		
+		<![CDATA[
+		rownum <= #{pageNum} * #{amount}
+		)
+		where rn > (#{pageNum}-1) * #{amount}
+		]]>
+	</select>
+
+
+
+	<insert id="insertSelectKey">
+		insert into tbl_board(bno,
+		title, content, writer)
+		values (
+		#{bno},
+		#{title},
+		#{content},
+		#{writer}
+		  )
+		  
+		<selectKey keyProperty="bno" order="BEFORE"
+			resultType="long">
+			select seq_board.nextval from dual
+		</selectKey>
+	</insert>
+
+	<delete id="delete">
+		delete tbl_board where bno=#{bno}
+	</delete>
+
+	<update id="update">
+		update tbl_board
+		set title=#{title , jdbcType=VARCHAR},
+		content=#{content , jdbcType=VARCHAR},
+		writer=#{writer , jdbcType=VARCHAR},
+		updateDate=sysdate
+		where bno=#{bno}
+	</update>
+
+	<select id="getTotalCount" resultType="int">
+		select count(bno) from
+		tbl_board where
+
+		<include refid="criteria" />
+		
+		<![CDATA[
+		bno > 0
+		]]>
+	</select>
+
+
+</mapper>
