@@ -1,5 +1,13 @@
 package kr.vin.controller;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,8 +15,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.vin.domain.BoardAttachVO;
 import kr.vin.domain.BoardVO;
 import kr.vin.domain.Criteria;
 import kr.vin.domain.PageDTO;
@@ -52,8 +62,8 @@ public class BoardController {
 
 		log.info("list: " + cri);
 		int total = service.getTotal(cri);
-		log.info("total : "+ total);
-		
+		log.info("total : " + total);
+
 		model.addAttribute("list", service.getList(cri));
 		model.addAttribute("pageMaker", new PageDTO(cri, total));
 	}
@@ -65,9 +75,13 @@ public class BoardController {
 // 컴포넌트 스캔에 패키지가 지정되어 있다면,
 // 매개변수 인자들은 스프링이 자동으로 생성 할당 함.
 		log.info("writer : " + board);
+		if (board.getAttachList() != null) {
+			board.getAttachList().forEach(attach -> log.info(attach));
+		}
+
 		service.writer(board);
 		rttr.addFlashAttribute("result", board.getBno());
-// 리다이렉트 시키면서 1회용 값을 전달.
+
 		return "redirect:/board/list";
 	}
 
@@ -78,15 +92,14 @@ public class BoardController {
 
 	// 제목 링크를 클릭하여 글 상세보기 - get 방식.
 	@GetMapping({ "/get", "/modify" })
-	public void get(@RequestParam(value ="bno", required = false) 
-			Long bno, 
-			@ModelAttribute("cri") Criteria cri, Model model) {
+	public void get(@RequestParam(value = "bno", required = false) Long bno, @ModelAttribute("cri") Criteria cri,
+			Model model) {
 		// @ModelAttribute("cri") 는 자동으로 객체 할당 저장.
 		// 자동으로 생성된 Criteria cri를 모델값으로 저장하는데,
 		// 저장명이 cri
 		// model.addAttribute("cri",cri) 와 같음.
-		
-		// @RequestParam : 요청 전달값으로 글번호 이용. 
+
+		// @RequestParam : 요청 전달값으로 글번호 이용.
 		// 매개 변수명과 전달값명이 다를때 이용 가능. 현재 코드에서는 생략 가능함.
 		log.info("/get");
 		model.addAttribute("board", service.get(bno));
@@ -97,29 +110,26 @@ public class BoardController {
 
 	// post 요청으로 /modify 가 온다면, 아래 메소드 수행.
 	@PostMapping("/modify")
-	public String modify(BoardVO board, 
-			@ModelAttribute("cri") Criteria cri,
-			RedirectAttributes rttr) {
+	public String modify(BoardVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		log.info("modify:" + board);
-		
+
 		if (service.modify(board)) {
 			rttr.addFlashAttribute("result", "success");
 		}
 		// 수정이 성공하면 success 메세지가 포함되어 이동.
 		// 실패해도 메세지 빼고 이동.
-		
+
 //		rttr.addAttribute("pageNum", cri.getPageNum());
 //		rttr.addAttribute("amount", cri.getAmount());
 //		rttr.addAttribute("type", cri.getType());
 //		rttr.addAttribute("keyword", cri.getKeyword());
-		
+
 //		return "redirect:/board/list" ;
-		return "redirect:/board/list" + cri.getListLink() ;
+		return "redirect:/board/list" + cri.getListLink();
 	}
 
 	@PostMapping("/remove")
-	public String remove(@RequestParam(value ="bno", required = false) Long bno, 
-			@ModelAttribute("cri") Criteria cri,
+	public String remove(@RequestParam(value = "bno", required = false) Long bno, @ModelAttribute("cri") Criteria cri,
 			RedirectAttributes rttr) {
 		log.info("remove..." + bno);
 		if (service.remove(bno)) {
@@ -133,5 +143,30 @@ public class BoardController {
 //		return "redirect:/board/list";
 		return "redirect:/board/list" + cri.getListLink();
 	}
-	
+
+	@GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<BoardAttachVO>> getAttachList(Long bno) {
+		log.info("getAttachList: " + bno);
+		return new ResponseEntity<>(service.getAttachList(bno), HttpStatus.OK);
+	}
+
+	private void deleteFiles(List<BoardAttachVO> attachList) {
+		// 게시물당 첨부된 파일을 찾아서 디스크에서 삭제.
+		if (attachList == null || attachList.size() == 0) {
+			return;
+		}
+		log.info("delete attach file......");
+		log.info(attachList);
+		attachList.forEach(attach -> {
+			try {
+				Path file = Paths.get(
+						"c:\\upload\\" + attach.getUploadPath() + "\\" + attach.getUuid() + "_" + attach.getFileName());
+				Files.deleteIfExists(file);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
 } // end of class

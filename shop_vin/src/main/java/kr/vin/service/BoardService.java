@@ -2,6 +2,7 @@ package kr.vin.service;
 
 import java.util.List;
 
+import kr.vin.domain.BoardAttachVO;
 import kr.vin.domain.BoardVO;
 import kr.vin.domain.Criteria;
 
@@ -19,5 +20,7 @@ public interface BoardService {
 	public List<BoardVO> getList(Criteria cri);
 	
 	public int getTotal(Criteria cri);
+	
+	public List<BoardAttachVO> getAttachList(Long bno);
 
 }

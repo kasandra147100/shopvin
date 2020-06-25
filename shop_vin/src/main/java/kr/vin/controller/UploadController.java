@@ -1,6 +1,8 @@
 package kr.vin.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,4 +54,23 @@ public class UploadController {
 // 2019-09-18
 // 2019/09/18 결과적으로 날짜별로 파일 저장.
 	}
+
+	@PostMapping("/deleteFile")
+	@ResponseBody
+	public ResponseEntity<String> deleteFile(String fileName, String type) {
+		log.info("deleteFile: " + fileName);
+		File file;
+		try {
+			file = new File("c:\\upload\\" + URLDecoder.decode(fileName, "UTF-8"));
+			// 한글의 경우, 페이지 전환시 변경됨.
+			// 알맞는 문자 포맷으로 해석해서 읽어 들여야 함.
+			file.delete();
+			// 파일 삭제.
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<String>("deleted", HttpStatus.OK);
+	}
+
 }

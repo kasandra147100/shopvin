@@ -61,6 +61,21 @@
    </div>
 </div>
 
+<br/>
+<div class="row">
+<div class="col-lg-12">
+<div class="panel panel-default">
+<div class="panel-heading">첨부파일</div>
+<div class="panel-body">
+<div class="uploadResult">
+<ul></ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
 <!-- 덧글 시작 -->
 <br />
 <div class="row">
@@ -326,10 +341,11 @@
 
 						modalRemoveBtn.on("click", function(e) {
 							var rno = modal.data("rno");
+							
 							replyService.remove(rno, function(result) {
 								alert(result);
 								modal.modal("hide");
-								showList(pageNum);
+								showList(1);
 							});
 						});
                         
@@ -337,6 +353,10 @@
             });// end_ready            
             
       </script>
+      
+      
+      
+      
 
 
       <script>
@@ -357,5 +377,50 @@
             });
          });
       </script>
+      
+      <script>
+		$(document).ready(function(){
+		(function(){
+		var bno='<c:out value="${board.bno}"/>';
+			// 화면상에 공유된 bno 값 가져와 사용 준비.
+			
+			$.getJSON("/board/getAttachList"
+				,{bno:bno}, function(arr){
+				console.log(arr);
+				
+			var str="";
+			$(arr).each(function(i,attach){
+				
+		str+="<li data-path='";
+		str+=attach.uploadPath+"' data-uuid='";
+		str+=attach.uuid+"' data-filename='";
+		str+=attach.fileName+"' data-type='";
+		str+=attach.fileType+"'><div>";
+		str+="<img src='/resources/img/attach.png'>";
+		str+="<span>"+attach.fileName+"</span><br/> ";
+		str+="</div></li>";
+		});
+			
+		$(".uploadResult ul").html(str);
+		});
+		})();
+		// bno를 전달하여 콘트롤러에서 처리후, 첨부파일 목록을 콘솔로 출력.
+		
+		$(".uploadResult").on("click","li",function(e){
+			console.log("download file");
+		var liObj = $(this);
+		
+		var path=encodeURIComponent(liObj.data("path")
+		+"/"+liObj.data("uuid")+"_"
+			+liObj.data("filename"));
+		self.location="/download?fileName="+path;
+		});
+});
+</script>
+      
+      
+      
+      
+      
 
       <%@include file="/WEB-INF/views/includes/footer.jsp"%>
