@@ -52,6 +52,11 @@ public class BoardController {
 //		model.addAttribute("list", service.getList());
 //// 과거 jsp에서는 request.setAttribute로 ArrayList를 전달했지만, 같은 역할을model이 대신한다.
 //	}
+	
+	
+
+	
+	
 
 	@GetMapping("/list")
 	public void list(Model model, Criteria cri) {
@@ -66,6 +71,21 @@ public class BoardController {
 
 		model.addAttribute("list", service.getList(cri));
 		model.addAttribute("pageMaker", new PageDTO(cri, total));
+	}
+	
+	
+	@GetMapping("/qna")
+	public void qna(Model model, Criteria cri) {
+		
+		log.info("list: " + cri);
+		int total = service.getTotal(cri);
+		log.info("total : " + total);
+
+		model.addAttribute("list", service.getQnaList(cri));
+		model.addAttribute("pageMaker", new PageDTO(cri, total));
+		
+		
+
 	}
 
 // jsp 대비로 if~else 분기 처리가 필요 없음.

@@ -92,6 +92,15 @@ public class BoardServiceImpl implements BoardService {
 	// 게시물 번호를 전달하고,
 	// 게시물 번호와 일치하는 첨부파일을 모두 리턴.
 	}
+
+	@Override
+	public List<BoardVO> getQnaList(Criteria cri) {
+		// TODO Auto-generated method stub
+		log.info("getQnaList...................");
+		
+		return mapper.getQnaList();
+	
+	}
 	
 
 }

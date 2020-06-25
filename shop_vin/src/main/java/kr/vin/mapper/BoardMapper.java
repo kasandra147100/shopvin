@@ -10,6 +10,8 @@ import kr.vin.domain.Criteria;
 public interface BoardMapper {
 	
 	public List<BoardVO> getList();
+	
+	public List<BoardVO> getQnaList();	
 
 	public List<BoardVO> getListWithPaging(Criteria cri);
 

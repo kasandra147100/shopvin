@@ -7,7 +7,16 @@
 	<select id="getList" resultType="kr.vin.domain.BoardVO">
 	
 		<![CDATA[
-		select * from tbl_board where bno > 0
+		select * from tbl_board where bno > 0 and bid= 'notice'
+		]]>
+		<!-- xml에서 <> 에 대한 잘못된 해석을 방지. -->
+
+	</select>
+	
+	<select id="getQnaList" resultType="kr.vin.domain.BoardVO">
+	
+		<![CDATA[
+		select * from tbl_board where bno > 0 and bid= 'qna'
 		]]>
 		<!-- xml에서 <> 에 대한 잘못된 해석을 방지. -->
 
@@ -37,15 +46,15 @@
 		resultType="kr.vin.domain.BoardVO">
 		
 	<![CDATA[
-		select bno, title, content, writer, regdate, updatedate , replycnt
+		select bno, title, content, writer, regdate, updatedate , replycnt, bid
 		from
 		(
 		select /*+INDEX_DESC(tbl_board pk_board) */ 
 		rownum rn, bno, title, content, writer, regdate, 
-		updatedate , replycnt
+		updatedate , replycnt , bid
 		from 
 		tbl_board 
-		where 
+		where bid= 'notice' and
 		]]>
 
 		<include refid="criteria" />

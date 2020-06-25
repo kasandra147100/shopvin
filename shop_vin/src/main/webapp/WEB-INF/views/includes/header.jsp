@@ -108,7 +108,7 @@
                            <ul class="dropdown">
                               <li><a
                                  href="${pageContext.request.contextPath}/board/list">공지사항</a></li>
-                              <li><a href="/ask/qna">Q&A</a></li>
+                              <li><a href="/board/qna">Q&A</a></li>
                            </ul></li>
                         <li><a href="/event">EVENT</a></li>
                         <li class="has-children active"><a href="#">management</a>
