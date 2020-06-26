@@ -22,6 +22,11 @@
          <div class="panel-heading"></div>
 
          <div class="panel-body" style="margin: 0px 20%;">
+         	
+         	<div class="form-group">
+               카테고리 <input class="form-control" name="bno"
+                  value='<c:out value="${board.bid }"/>' readonly="readonly">
+            </div>
 
             <div class="form-group">
                게시물 번호 <input class="form-control" name="bno"
@@ -46,6 +51,8 @@
 
             <button data-oper="modify" class="btn btn-warning">Modify</button>
             <button data-oper="list" class="btn btn-info">List</button>
+            <button onClick="history.go(-1)" class="btn btn-info">돌아가기</button>
+            
 
 
             <form id="operForm" action="/board/modify" method="get">
@@ -378,47 +385,46 @@
          });
       </script>
       
-      <script>
-		$(document).ready(function(){
-		(function(){
-		var bno='<c:out value="${board.bno}"/>';
-			// 화면상에 공유된 bno 값 가져와 사용 준비.
-			
-			$.getJSON("/board/getAttachList"
-				,{bno:bno}, function(arr){
-				console.log(arr);
-				
-			var str="";
-			$(arr).each(function(i,attach){
-				
-		str+="<li data-path='";
-		str+=attach.uploadPath+"' data-uuid='";
-		str+=attach.uuid+"' data-filename='";
-		str+=attach.fileName+"' data-type='";
-		str+=attach.fileType+"'><div>";
-		str+="<img src='/resources/img/attach.png'>";
-		str+="<span>"+attach.fileName+"</span><br/> ";
-		str+="</div></li>";
-		});
-			
-		$(".uploadResult ul").html(str);
-		});
-		})();
-		// bno를 전달하여 콘트롤러에서 처리후, 첨부파일 목록을 콘솔로 출력.
-		
-		$(".uploadResult").on("click","li",function(e){
-			console.log("download file");
-		var liObj = $(this);
-		
-		var path=encodeURIComponent(liObj.data("path")
-		+"/"+liObj.data("uuid")+"_"
-			+liObj.data("filename"));
-		self.location="/download?fileName="+path;
-		});
-});
+<script>
+	$(document).ready(function() {
+
+					 (function() {var bno = '<c:out value="${board.bno}" />';
+					 //화면상에 공유된 bno값 가져와 사용 준비.
+
+						$.getJSON("/board/getAttachList",
+											{bno : bno},
+											function(arr) {console.log(arr);
+												var str = "";
+
+												$(arr).each(function(i, attach) 
+														  {str += "<li data-path='";
+	    	                                               str+=attach.uploadPath+"' data-uuid='";
+	                                                       str+=attach.uuid+"' data-filename='";
+	    	                                               str+=attach.fileName+"' data-type='";
+	    	                                               str+=attach.fileType+"'><div>";
+													       str+= "<img src='/resources/imges/attach.png'>";
+														   str += "<span>" + attach.fileName + "</span><br/> ";
+                                                           str += "</div></li>";
+                                                           });
+												$(".uploadResult ul").html(str);
+
+											});
+						})();// 즉시 실행 함수, 호출시 실행.
+						
+						
+					 $(".uploadResult").on("click","li",function(e) {
+							console.log("download file");
+							var liObj = $(this);
+							var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+							self.location="/download?fileName="+path;
+						});
+						
+						
+					});
+	
+	
+	
 </script>
-      
-      
       
       
       

@@ -16,7 +16,7 @@
 <div class="card shadow mb-4" style="margin: 0px 10%;">
 
 	<div class="card-header py-3">
-		<h6 class="m-0 font-weight-bold text-primary">공지사항</h6>
+		<h6 class="m-0 font-weight-bold text-primary">Q & A</h6>
 
 	</div>
 

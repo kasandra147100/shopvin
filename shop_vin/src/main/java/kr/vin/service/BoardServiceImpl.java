@@ -35,6 +35,7 @@ public class BoardServiceImpl implements BoardService {
 				board.getAttachList().size() <=0) {
 				return;
 				}
+		
 				board.getAttachList().forEach(attach->{
 				attach.setBno(board.getBno());
 				attachMapper.insert(attach);

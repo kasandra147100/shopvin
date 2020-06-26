@@ -34,6 +34,10 @@
 					value="${cri.keyword }">
 					
 					<div class="form-group">
+						<label>카테고리</label> <input class="form-control" name="bno"
+							value="${board.bid }" readonly="readonly">
+					</div>
+					<div class="form-group">
 						<label>Bno</label> <input class="form-control" name="bno"
 							value="${board.bno }" readonly="readonly">
 					</div>
@@ -69,7 +73,8 @@
 					<button type="submit" data-oper='modify' class="btn btn-success">Modify</button>
 					<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>
 					<button type="submit" data-oper='list' class="btn btn-info">List</button>
-
+					<button onClick="history.go(-3)" class="btn btn-info">돌아가기</button>
+					
 				</form>
 			</div>
 		</div>
@@ -94,8 +99,7 @@
 			} else if (operation === 'list') {
 				/* self.location = "/board/list";
 				return; */
-				formObj.attr("action","/board/list")
-				.attr("method","get");// 위쪽과 한줄.
+				formObj.attr("action","/board/list").attr("method","get");
 				
 				var pageNumTag
 				=$("input[name='pageNum']").clone();

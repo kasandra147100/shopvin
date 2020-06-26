@@ -95,12 +95,15 @@ public class BoardController {
 // 컴포넌트 스캔에 패키지가 지정되어 있다면,
 // 매개변수 인자들은 스프링이 자동으로 생성 할당 함.
 		log.info("writer : " + board);
-		if (board.getAttachList() != null) {
-			board.getAttachList().forEach(attach -> log.info(attach));
+		
+		if(board.getAttachList()!=null) {
+			board.getAttachList().forEach(
+					attach -> log.info(attach));
 		}
 
 		service.writer(board);
 		rttr.addFlashAttribute("result", board.getBno());
+		log.info("result: " + board.getBno());
 
 		return "redirect:/board/list";
 	}
