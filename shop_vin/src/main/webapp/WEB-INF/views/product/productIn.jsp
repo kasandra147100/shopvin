@@ -53,21 +53,66 @@
             원산지: <strong class="item-price">${product.productOri}</strong>
             <hr>
          </div>
+         상품설명 <br> <strong class="item-price" style="font-weight: bold;">${product.productDesc}</strong>
+         <hr>
+         <div></div>
          <div>
             <label>색상</label><select class="form-control">
                <option style="font-weight: bold;">${product.productColor}</option>
-            </select> <br> <label>사이즈</label><select class="form-control">
+            </select><label>사이즈</label><select class="form-control">
                <option style="font-weight: bold;">${product.productSize}</option>
             </select>
          </div>
          <br>
-         <br>
-         <button type="button">구매하기</button>
-         <button type="button">장바구니</button>
+         <div>
+            <form name="form1" method="post"
+               action="${path}/product/cart/insert.do">
+               <input type="hidden" name="productId" value="${vo.productId}">
+               <select name="amount">
+                  <c:forEach begin="1" end="10" var="i">
+                     <option value="${i}">${i}</option>
+                  </c:forEach>
+               </select> &nbsp;개
+
+               <button type="button" class="addCart_btn" style="margin-left: 30px">카트에
+                  담기</button>
+               <p class="addToCart">
+
+                  <script>
+                     $(".addCart_btn").click(function() {
+                        var bno = $("#bno").val();
+                        var cartStock = $(".numBox").val();
+
+                        var data = {
+                           bno : bno,
+                           cartStock : cartStock
+                        };
+
+                        $.ajax({
+                           url : "/product/addCart",
+                           type : "post",
+                           data : data,
+                           success : function(result) {
+                              if (result == 1) {
+                                 alert("카트 담기 성공");
+                                 $(".numBox").val("1");
+                              } else {
+                                 alert("회원만 사용할 수 있습니다.")
+                                 $(".numBox").val("1");
+                              }
+                           },
+                           error : function() {
+                              alert("카트 담기 실패");
+                           }
+                        });
+                     });
+                  </script>
+               </p>
+            </form>
+         </div>
       </div>
    </div>
 </body>
-
 
 
 <%@include file="/WEB-INF/views/includes/footer.jsp"%>

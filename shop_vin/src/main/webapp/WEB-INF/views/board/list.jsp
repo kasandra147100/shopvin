@@ -27,13 +27,7 @@
 			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 				<thead>
 					<tr>
-						<th>
-							#번호
-								<button id="btnCreatDtOrder" class="w20porder" data-datanm="creatdt">최신순</button><br>
-								<button id="btnPointOrder" class="w20porder" data-datanm="point">인기순</button>
-							
-						</th>
-
+						<th>#번호</th>
 						<th>제목</th>
 						<th>작성자</th>
 						<th>작성일</th>

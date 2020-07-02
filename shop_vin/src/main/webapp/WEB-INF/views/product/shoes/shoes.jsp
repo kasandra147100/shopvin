@@ -61,7 +61,7 @@
 			</c:if>
 			<c:forEach var="num" begin="${pageMaker.startPage }"
 				end="${pageMaker.endPage }">
-				<li class='page-item  ${pageMaker.cri.pageNum==num?"active":"" }'><a
+				<li class='page-item  ${pageMaker.cri2.pageNum==num?"active":"" }'><a
 					href="${num }" class="page-link">${num }</a></li>
 			</c:forEach>
 
@@ -72,8 +72,8 @@
 	</div>
 
 	<form id="actionForm" action="/product/shoes/shoes" method="get">
-		<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
-		<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
+		<input type="hidden" name="pageNum" value="${pageMaker.cri2.pageNum }">
+		<input type="hidden" name="amount" value="${pageMaker.cri2.amount }">
 	</form>
 	<script>
 		$(document).ready(function() {

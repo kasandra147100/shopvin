@@ -6,6 +6,10 @@
 
 <mapper namespace="kr.vin.mapper.UserMapper">
 
+	<select id="read" resultType="kr.vin.domain.UserVO">
+		select * from user_tbl where userId
+		= #{userId}
+	</select>
 
 	<select id="getList" resultType="kr.vin.domain.UserVO"> 
 	<![CDATA[
@@ -15,17 +19,17 @@
 
 	<insert id="insert">
 		insert into user_tbl
-		(userId,userPw,userName,Birth,zipCode,userAddr,userAddr2,userPhone,userMail,detailAddr,extraAddr)
+		(userId,userPw,userName,Birth,
+		zipCode,userAddr,userAddr2,userPhone,userMail,
+		detailAddr,extraAddr)
 		values(#{userId},#{userPw},#{userName},#{Birth},
-		#{zipCode},#{userAddr},#{userAddr2},#{userPhone},#{userMail},#{detailAddr},#{extraAddr}
+		#{zipCode},#{userAddr},#{userAddr2},#{userPhone},#{userMail}
+		,#{detailAddr},#{extraAddr}
 		)
 	</insert>
 
 
-	<select id="read" resultType="kr.vin.domain.UserVO">
-		select * from user_tbl where userId
-		= #{userId}
-	</select>
+
 
 	<delete id="delete">
 		delete from user_tbl where userId=#{userId}
@@ -51,17 +55,17 @@
 		userId = #{userId}
 	</update>
 
-<!-- 아이디 중복 검사 -->
-<select id="checkOverId" parameterType="String" resultType="int">
-select count(*) from user_tbl where userId = #{userId}
-</select>
-	
-	
-	<!--로그인  -->
+	<!-- 아이디 중복 검사 -->
+	<select id="checkOverId" parameterType="String" resultType="int">
+		select count(*) from user_tbl where userId = #{userId}
+	</select>
+
+
+	<!--로그인 -->
 	<select id="id_all_check" resultType="kr.vin.domain.UserVO">
 
-SELECT * FROM user_tbl where userId=#{Id}
-</select>
-	
+		SELECT * FROM user_tbl where userId=#{Id}
+	</select>
+
 
 </mapper>

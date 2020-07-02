@@ -107,9 +107,15 @@ public class BoardController {
 
 		return "redirect:/board/list";
 	}
+	
 
 	@GetMapping("/writer")
 	public void writer() {
+
+	}
+	
+	@GetMapping("/qnawriter")
+	public void qnawriter() {
 
 	}
 

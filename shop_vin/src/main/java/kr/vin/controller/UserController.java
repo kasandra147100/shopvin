@@ -1,5 +1,7 @@
 package kr.vin.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,9 +26,6 @@ public class UserController {
 
 	@Autowired
 	private UserService service;
-	
-	
-	
 
 	@GetMapping("/list")
 	public String list(Model model) {
@@ -39,36 +38,38 @@ public class UserController {
 
 	
 
-	@PostMapping("/register")
-	public String register(UserVO user, RedirectAttributes rttr) throws Exception {
-		log.info("Register: " + user);
-		service.register(user);
-		rttr.addFlashAttribute("result", user.getUserId());
+	// id 중복 체크 컨트롤러
+    @RequestMapping(value = "idCheck", method = RequestMethod.POST)
+    @ResponseBody
+    public int idCheck(@RequestParam(value="userId") String userId) {
 
+       System.out.println("오니");
+       log.info("userid값 " + userId);
+       
+       return service.userIdCheck(userId);
+    }
+	
+	
+	
+	@RequestMapping(value="/memberUpdateView", method=RequestMethod.GET)
+	public String registerUpdateView() throws Exception{
+		return "user/memberUpdateView";
+		
+	}
+	
+	@RequestMapping(value="/memberUpdate", method=RequestMethod.POST)
+	public String registerUpdate(UserVO vo, HttpSession session)throws Exception{
+		service.memberUpdate(vo);
+		session.invalidate();
 		return "redirect:/";
 	}
 	
 
-	// id 중복 체크 컨트롤러
-		@RequestMapping(value = "idCheck", method = RequestMethod.POST)
-		@ResponseBody
-		public int idCheck(@RequestParam(value="userId") String userId) {
-
-			System.out.println("오니");
-			log.info("userid값 " + userId);
-			
-			return service.userIdCheck(userId);
-		}
-
 	
-		// 로그인 컨트롤러
-		@RequestMapping(value = "/login", method = RequestMethod.GET)
-		public String gologin() {
-
-			return "login";
-		}
-		
 	
+
+}
+
 //	@PostMapping
 //	public String register(UserVO user, RedirectAttributes rttr) {
 //		log.info("Register: " + user);
@@ -77,5 +78,3 @@ public class UserController {
 //
 //		return "redirect:/user/register";
 //	}
-
-}

@@ -1,14 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags"  prefix="sec"%>
 <!DOCTYPE html>
 <html lang="en">
+
+
 <head>
 <title>MAIVIN &mdash; Colorlib e-Commerce Template</title>
 
-
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-
+<meta name="viewport"
+   content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/owl.carousel.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
@@ -21,27 +22,40 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/style.css">
 
 
-
-
 <style>
 .primary-font {
-	font-weight: bold;
-	color: blue;
+   font-weight: bold;
+   color: blue;
 }
 .w20porder{
-	padding : 0px , -3px;
-	margin-right : -10px;
-	font-size : xx-small;
-	float : right;
-	border: 0;
-	outline: 0;
-	background-color: white;
+   padding : 0px , -3px;
+   margin-right : -10px;
+   font-size : xx-small;
+   float : right;
+   border: 0;
+   outline: 0;
+   background-color: white;
+}
+.modal-dialog{
+   top: 250px;
+   
+
 }
 
 </style>
 
-
 </head>
+   <script src="${pageContext.request.contextPath }/resources/js/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+   $(document).ready(function() {
+
+      $("#memberUpdateBtn").on("click", function() {
+         location.href = "user/memberUpdateView";
+      })
+
+   })
+</script>
 
 
 
@@ -70,6 +84,7 @@
                      <a href="/main.jsp" class="js-logo-clone">MAIVIN</a>
                   </div>
                </div>
+               
                <div class="main-nav d-none d-lg-block">
                   <nav class="site-navigation text-right text-md-center"
                      role="navigation">
@@ -120,8 +135,10 @@
                      </ul>
                   </nav>
                </div>
+               
                <div class="icons">
-                  <a href="/login.jsp"> <span class="icon-user"></span>
+               
+                 <a href="customLogin"> <span class="icon-user"></span>
                   </a> <a style="margin-left: 12px;" href="register.jsp"> <span
                      class="icon-user-plus"></span>
                   </a> <a style="margin-left: 2px;" href="#"
@@ -134,6 +151,7 @@
                   </a> <a href="#"
                      class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none">
                      <span class="icon-menu"></span>
+
                   </a>
                </div>
             </div>
@@ -141,15 +159,15 @@
       </div>
    </div>
    <br>
-
-	<script src="${pageContext.request.contextPath }/resources/js/jquery-3.3.1.min.js"></script>
-    <script src="${pageContext.request.contextPath }/resources/js/jquery-ui.js"></script>
-   	<script src="${pageContext.request.contextPath }/resources/js/popper.min.js"></script>
-	<script src="${pageContext.request.contextPath }/resources/js/bootstrap.min.js"></script>
-	<script src="${pageContext.request.contextPath }/resources/js/owl.carousel.min.js"></script>
-	<script src="${pageContext.request.contextPath }/resources/js/jquery.magnific-popup.min.js"></script>
-	<script src="${pageContext.request.contextPath }/resources/js/aos.js"></script>
-	<script src="${pageContext.request.contextPath }/resources/js/main.js"></script>
-
-
+   
+   
+   <script src="${pageContext.request.contextPath }/resources/js/jquery-ui.js"></script>
+   <script src="${pageContext.request.contextPath }/resources/js/popper.min.js"></script>
+   <script src="${pageContext.request.contextPath }/resources/js/bootstrap.min.js"></script>
+   <script src="${pageContext.request.contextPath }/resources/js/owl.carousel.min.js"></script>
+   <script src="${pageContext.request.contextPath }/resources/js/jquery.magnific-popup.min.js"></script>
+   <script src="${pageContext.request.contextPath }/resources/js/aos.js"></script>
+   <script src="${pageContext.request.contextPath }/resources/js/main.js"></script>
+   
+   
 </body>

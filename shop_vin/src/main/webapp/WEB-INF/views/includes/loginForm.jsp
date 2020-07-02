@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
     <meta charset="utf-8">
@@ -26,44 +26,53 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></scri.row>.containerpt>
     <![endif]-->
-  </head>
   
-  <body>
-    <div  class="container">
+  </head>
+
+
+   <body>
+   
+   
+     <div  class="container">
       <div style="margin-top: 10px"   class="row">
       
         
         
         <div style="margin: auto; right: 120px" class="col-md-3">
           <div style="width: 500px;" class="login-box well">
-        <form accept-charset="UTF-8" role="form" method="post" action="">
-            <div class="form-group">
-                <label for="username-email">아이디</label>
-                <input name="user_id" value='' id="username-email" placeholder="Username" type="text" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label for="password">비밀번호</label>
-                <input name="password" id="password" value='' placeholder="Password" type="password" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-default btn-login-submit btn-block m-t-md" value="Login" />
-            </div>
-             <span class='text-center'><a href="/bbs/index.php?mid=index&act=dispMemberFindAccount" class="text-sm">아이디 찾기</a></span>
-            <span class='text-center'><a href="/bbs/index.php?mid=index&act=dispMemberFindAccount" class="text-sm">비밀번호 찾기</a></span>
-            <hr />
-            <div class="form-group">
-                <a href="register.jsp" class="btn btn-default btn-block m-t-md"> 회원가입</a>
-            </div>
-        </form>
-          </div>
-        </div>
-      </div>
-    </div>
+   
+   <h1>로그인 페이지</h1>
+   <form class="px-4 py-3" action="/login" method="post">
+      <input type="text" class="form-control" name="loginId"
+         placeholder="아이디"><br> <input type="password"
+         class="form-control" name="password" placeholder="비밀번호"><br>
+      <input name="${_csrf.parameterName}" type="hidden"
+         value="${_csrf.token}" />
+      <button type="submit" class="btn btn-primary">로그인</button>
+      <br>
+             <div class="form-group">
+                <a href="/register" class="btn btn-default btn-block m-t-md"> 회원가입</a></div>
+      
+   </form>
+   <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}"> <!--  SPRING_SECURITY_LAST_EXCEPTION 에 값이 있다면 작동-->
+      <font color="red">
+         <p>
+            Your login attempt was not successful due to          
+           
+            ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
+         	  
+         	   <br>
+             	 로그인이 차단돼었습니다
+             <br /> 
+         </p> <c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session" />
+      </font>
+   </c:if>
 
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="js/bootstrap.min.js"></script>
-  </body>
+</div>
+</div>
+</div>
+</div>
+
+</body>
   
   </html>

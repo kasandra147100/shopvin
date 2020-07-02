@@ -7,6 +7,7 @@
 
 <%@ include file="../includes/header.jsp"%>
 
+<script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
 
 <div class="row">
    <div class="col-lg-12">
@@ -40,8 +41,11 @@
 
             <div class="form-group">
                내용
-               <textarea rows="3" class="form-control" name="content"
+               <textarea rows="3" class="form-control" name="content" id='editor4'
                   readonly="readonly"><c:out value="${board.content }" /></textarea>
+                  <script>
+  							  CKEDITOR.replace("editor4");
+  						  </script>
             </div>
 
             <div class="form-group">
@@ -165,7 +169,7 @@
             </div>
          </div>
       </div>
-
+	
 
       <script type="text/javascript" src="/resources/js/reply.js"></script>
 

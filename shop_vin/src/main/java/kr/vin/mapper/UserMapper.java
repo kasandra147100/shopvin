@@ -28,6 +28,10 @@ public interface UserMapper {
 	public ArrayList<UserVO> idCheck(UserVO vo);
 	
 	public UserVO id_all_check(String id);
+
+	public void Member_dete(String userId);
+
+	public void memberUpdate(UserVO vo) throws Exception;
 	
 	}
 

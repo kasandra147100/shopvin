@@ -19,12 +19,9 @@ import lombok.extern.log4j.Log4j;
 
 public class UserServiceImpl implements UserService {
 	private UserMapper mapper;
-	
+
 	@Autowired
 	private SqlSessionTemplate userSql;
-	
-
-	
 
 	@Override
 	public void register(UserVO user) throws Exception {
@@ -32,18 +29,18 @@ public class UserServiceImpl implements UserService {
 
 		mapper.insert(user);
 	}
-	
+
 	@Override
 	public List<UserVO> getList() {
 		log.info("getList........");
-		
+
 		return mapper.getList();
 	}
 
 	@Override
 	public int userIdCheck(String userId) {
 		mapper = userSql.getMapper(UserMapper.class);
-		
+
 		return mapper.checkOverId(userId);
 	}
 
@@ -53,9 +50,17 @@ public class UserServiceImpl implements UserService {
 		return mapper.id_all_check(id);
 	}
 
-	
-	
+	@Override
+	public void Member_delete(String userId) {
+		mapper.Member_dete(userId);
 
-	
+	}
+
+	@Override
+	public void memberUpdate(UserVO vo) throws Exception {
+		mapper.memberUpdate(vo);
+		
+	}
+
 
 }

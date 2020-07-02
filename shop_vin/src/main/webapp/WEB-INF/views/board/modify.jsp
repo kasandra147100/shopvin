@@ -6,6 +6,7 @@
 
 <%@ include file="../includes/header.jsp"%>
 
+<script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
 
 <div class="row">
 	<div class="col-lg-12">
@@ -49,8 +50,17 @@
 
 					<div class="form-group">
 						<label>Text area</label>
-						<textarea rows="3" class="form-control" name="content"><c:out value="${board.content }" /></textarea>
+						
+						<textarea id='editor4' rows="3" class="form-control" name="content"><c:out value="${board.content }" /></textarea>
+						<script>
+  							  CKEDITOR.replace("editor4");
+  						  </script>
+						
+						
 					</div>
+					
+					
+					
 					<div class="form-group">
 						<label>Writer</label> <input class="form-control" name="writer"
 							value='<c:out value="${board.writer }"/>' readonly="readonly">
@@ -70,11 +80,14 @@
 					pattern = "yyyy/MM/dd" value = "${board.updateDate}" />'
 							readonly="readonly">
 					</div>
+					
 					<button type="submit" data-oper='modify' class="btn btn-success">Modify</button>
+					
+					
 					<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>
 					<button type="submit" data-oper='list' class="btn btn-info">List</button>
 					<button onClick="history.go(-3)" class="btn btn-info">돌아가기</button>
-					
+					<input name="${_csrf.parameterName}" type="hidden"  value="${_csrf.token}" />
 				</form>
 			</div>
 		</div>

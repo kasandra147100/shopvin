@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.vin.domain.CartListVO;
 import kr.vin.domain.Criteria;
+import kr.vin.domain.Criteria2;
 import kr.vin.domain.ProductVO;
 import kr.vin.mapper.ProductMapper;
 import lombok.AllArgsConstructor;
@@ -58,83 +60,84 @@ public class ProductServiceImpl implements ProductService {
    }
 
    @Override
-   public List<ProductVO> topView(Criteria cri) {
-      return mapper.topView(cri);
+   public List<ProductVO> topView(Criteria2 cri2) {
+      // log.info("get List with criteria2: " + cri2);
+      return mapper.topView(cri2);
    }
 
    @Override
-   public List<ProductVO> teeView(Criteria cri) {
-      return mapper.teeView(cri);
+   public List<ProductVO> teeView(Criteria2 cri2) {
+      return mapper.teeView(cri2);
    }
 
    @Override
-   public List<ProductVO> shirtView(Criteria cri) {
-      return mapper.shirtView(cri);
+   public List<ProductVO> shirtView(Criteria2 cri2) {
+      return mapper.shirtView(cri2);
    }
 
    @Override
-   public List<ProductVO> knitView(Criteria cri) {
-      return mapper.knitView(cri);
+   public List<ProductVO> knitView(Criteria2 cri2) {
+      return mapper.knitView(cri2);
    }
 
    @Override
-   public List<ProductVO> bottomView(Criteria cri) {
-      return mapper.bottomView(cri);
+   public List<ProductVO> bottomView(Criteria2 cri2) {
+      return mapper.bottomView(cri2);
    }
 
    @Override
-   public List<ProductVO> denimView(Criteria cri) {
-      return mapper.denimView(cri);
+   public List<ProductVO> denimView(Criteria2 cri2) {
+      return mapper.denimView(cri2);
    }
 
    @Override
-   public List<ProductVO> slacksView(Criteria cri) {
-      return mapper.slacksView(cri);
+   public List<ProductVO> slacksView(Criteria2 cri2) {
+      return mapper.slacksView(cri2);
    }
 
    @Override
-   public List<ProductVO> shoesView(Criteria cri) {
-      return mapper.shoesView(cri);
+   public List<ProductVO> shoesView(Criteria2 cri2) {
+      return mapper.shoesView(cri2);
    }
 
    @Override
-   public List<ProductVO> accView(Criteria cri) {
-      return mapper.accView(cri);
+   public List<ProductVO> accView(Criteria2 cri2) {
+      return mapper.accView(cri2);
    }
 
    @Override
-   public List<ProductVO> bagView(Criteria cri) {
-      return mapper.bagView(cri);
+   public List<ProductVO> bagView(Criteria2 cri2) {
+      return mapper.bagView(cri2);
    }
 
    @Override
-   public List<ProductVO> beltList(Criteria cri) {
-      return mapper.beltView(cri);
+   public List<ProductVO> beltList(Criteria2 cri2) {
+      return mapper.beltView(cri2);
    }
 
    @Override
-   public List<ProductVO> hatView(Criteria cri) {
-      return mapper.hatView(cri);
+   public List<ProductVO> hatView(Criteria2 cri2) {
+      return mapper.hatView(cri2);
    }
 
    @Override
-   public List<ProductVO> neckLaceView(Criteria cri) {
-      return mapper.neckLaceView(cri);
+   public List<ProductVO> neckLaceView(Criteria2 cri2) {
+      return mapper.neckLaceView(cri2);
    }
 
    @Override
-   public List<ProductVO> ringView(Criteria cri) {
-      return mapper.ringView(cri);
+   public List<ProductVO> ringView(Criteria2 cri2) {
+      return mapper.ringView(cri2);
    }
 
    @Override
-   public List<ProductVO> saleView(Criteria cri) {
-      return mapper.saleView(cri);
+   public List<ProductVO> saleView(Criteria2 cri2) {
+      return mapper.saleView(cri2);
    }
 
    @Override
-   public List<ProductVO> outerView(Criteria cri) {
-      return mapper.outerView(cri);
+   public List<ProductVO> outerView(Criteria2 cri2) {
+      return mapper.outerView(cri2);
    }
 
    @Override
@@ -143,5 +146,27 @@ public class ProductServiceImpl implements ProductService {
       return mapper.productInView(cri);
    }
 
+   @Override
+   public int getTotal(Criteria cri) {
+      // TODO Auto-generated method stub
+      log.info("get total count");
+      return mapper.getTotalCount(cri);
+   }
+
+   @Override
+   public int getTotal2(Criteria2 cri2) {
+      // TODO Auto-generated method stub
+      return mapper.getTotal2Count(cri2);
+   }
+
+   @Override
+   public void addCart(CartListVO cart) throws Exception {
+      mapper.addCart(cart);
+   }
+
+   @Override
+   public List<CartListVO> cartList(String userId) throws Exception {
+      return mapper.cartList(userId);
+   }
 
 }

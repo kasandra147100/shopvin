@@ -2,9 +2,11 @@ package kr.vin.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,13 +14,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.vin.domain.CartListVO;
 import kr.vin.domain.Criteria;
+import kr.vin.domain.Criteria2;
 import kr.vin.domain.PageDTO;
+import kr.vin.domain.PageDTO2;
 import kr.vin.domain.ProductVO;
+import kr.vin.domain.UserVO;
 import kr.vin.service.ProductService;
 import kr.vin.utils.UploadFileUtils;
 import lombok.AllArgsConstructor;
@@ -32,138 +40,188 @@ public class ProductController {
 
    private ProductService service;
 
+   // 카트 담기
+   @ResponseBody
+   @RequestMapping(value = "/addCart", method = RequestMethod.POST)
+   public int addCart(CartListVO cart, HttpSession session) throws Exception {
+
+      int result = 0;
+
+      UserVO member = (UserVO) session.getAttribute("member");
+
+      if (member != null) {
+         cart.setUserId(member.getUserId());
+         service.addCart(cart);
+         result = 1;
+      }
+      return result;
+   }
+
+   // 카트 목록
+   @RequestMapping(value = "/cartList", method = RequestMethod.GET)
+   public void getCartList(HttpSession session, Model model) throws Exception {
+      log.info("get cart list");
+
+      UserVO member = (UserVO) session.getAttribute("member");
+      String userId = member.getUserId();
+
+      List<CartListVO> cartList = service.cartList(userId);
+
+      model.addAttribute("cartList", cartList);
+
+   }
+
    @GetMapping("/productIn")
-   public void porudctInList(@RequestParam(value ="bno") Long bno, Model model, Criteria cri, MultipartFile file) {
+   public void porudctInList(@RequestParam(value = "bno") Long bno, Model model, Criteria cri, MultipartFile file) {
+
+      int total = service.getTotal(cri);
       model.addAttribute("list", service.productInView(cri));
       model.addAttribute("product", service.get(bno));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      model.addAttribute("pageMaker", new PageDTO(cri, total));
    }
 
    @GetMapping("/top/top")
-   public String topList(Criteria cri, Model model) {
+   public String topList(Criteria2 cri2, Model model) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.topView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+
+      model.addAttribute("list", service.topView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/top/top";
    }
 
    @GetMapping("/top/tee")
-   public String teeList(Model model, Criteria cri) {
+   public String teeList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.teeView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.teeView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/top/tee";
    }
 
    @GetMapping("/top/shirt")
-   public String shirtList(Model model, Criteria cri) {
+   public String shirtList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.shirtView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.shirtView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/top/shirt";
    }
 
    @GetMapping("/top/knit")
-   public String knitList(Model model, Criteria cri) {
+   public String knitList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.knitView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.knitView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/top/knit";
    }
 
    @GetMapping("/bottom/bottom")
-   public String bottomList(Model model, Criteria cri) {
+   public String bottomList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.bottomView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.bottomView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/bottom/bottom";
    }
 
    @GetMapping("/bottom/denim")
-   public String denimList(Model model, Criteria cri) {
+   public String denimList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.denimView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.denimView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/bottom/denim";
    }
 
    @GetMapping("/bottom/slacks")
-   public String slacksList(Model model, Criteria cri) {
+   public String slacksList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.slacksView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.slacksView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/bottom/slacks";
    }
 
    @GetMapping("/shoes/shoes")
-   public String shoesList(Model model, Criteria cri) {
+   public String shoesList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.shoesView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.shoesView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/shoes/shoes";
    }
 
    @GetMapping("/acc/acc")
-   public String accList(Model model, Criteria cri) {
+   public String accList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.accView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.accView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/acc/acc";
    }
 
    @GetMapping("/acc/bag")
-   public String bagList(Model model, Criteria cri) {
+   public String bagList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.bagView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.bagView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/acc/bag";
    }
 
    @GetMapping("/acc/belt")
-   public String beltList(Model model, Criteria cri) {
+   public String beltList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.beltList(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.beltList(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/acc/belt";
    }
 
    @GetMapping("/acc/hat")
-   public String hatList(Model model, Criteria cri) {
+   public String hatList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.hatView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.hatView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/acc/hat";
    }
 
    @GetMapping("/acc/neckLace")
-   public String neckLaceList(Model model, Criteria cri) {
+   public String neckLaceList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.neckLaceView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.neckLaceView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/acc/neckLace";
    }
 
    @GetMapping("/acc/ring")
-   public String ringList(Model model, Criteria cri) {
+   public String ringList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.ringView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.ringView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/acc/ring";
    }
 
    @GetMapping("/sale/sale")
-   public String saleList(Model model, Criteria cri) {
+   public String saleList(Model model, Criteria2 cri2) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.saleView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.saleView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/sale/sale";
    }
 
    @GetMapping("/outer/outer")
-   public String outerList(Criteria cri, Model model) {
+   public String outerList(Criteria2 cri2, Model model) {
       // http://localhost:8090/product/top/top
-      model.addAttribute("list", service.outerView(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      int total2 = service.getTotal2(cri2);
+      model.addAttribute("list", service.outerView(cri2));
+      model.addAttribute("pageMaker", new PageDTO2(cri2, total2));
       return "/product/outer/outer";
    }
 
@@ -172,9 +230,9 @@ public class ProductController {
 
    @GetMapping("/list")
    public String list(Model model, Criteria cri) {
-      log.info("list : " + cri);
+      int total = service.getTotal(cri);
       model.addAttribute("list", service.getList(cri));
-      model.addAttribute("pageMaker", new PageDTO(cri, 123));
+      model.addAttribute("pageMaker", new PageDTO(cri, total));
       return "/product/list";
    }
 

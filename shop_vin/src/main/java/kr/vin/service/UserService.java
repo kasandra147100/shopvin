@@ -16,6 +16,11 @@ public interface UserService {
 	public int userIdCheck(String userId);
 	
 	public UserVO search(String id);
+
+	public void Member_delete(String userId);
+
+	public void memberUpdate(UserVO vo)throws Exception;
+	
 	
 	
 

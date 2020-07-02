@@ -27,13 +27,7 @@
 			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 				<thead>
 					<tr>
-						<th>
-							#번호
-								<button id="btnCreatDtOrder" class="w20porder" data-datanm="creatdt">최신순</button><br>
-								<button id="btnPointOrder" class="w20porder" data-datanm="point">인기순</button>
-							
-						</th>
-
+						<!-- <th>#번호</th> -->
 						<th>제목</th>
 						<th>작성자</th>
 						<th>작성일</th>
@@ -45,9 +39,9 @@
 					<c:forEach var="board" items="${list }">
 
 						<tr>
-							<td>
+							<%-- <td>
 								<c:out value="${board.bno }" />
-							</td>
+							</td> --%>
 
 							<td>
 								<a style="color: black;" class="move" href='<c:out value="${board.bno }"/>'> <c:out value="${board.title }" />
@@ -145,7 +139,7 @@
 	$(document).ready(
 			function() {
 				$("#regBtn").on("click", function() {
-					self.location = "/board/writer";
+					self.location = "/board/qnawriter";
 					/* 아이디 regBtn 을 클릭한다면
 					현재창의 위치를 쓰기로 변경 */
 				});
